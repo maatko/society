@@ -1,0 +1,9 @@
+[build]
+
+cmd = "make clean build"
+bin = "./tmp/secrete"
+
+watch_dir = "."
+
+exclude_dir = [".git"]
+ignore = ["*.md"]
