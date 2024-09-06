@@ -1,5 +1,13 @@
 package main
 
+import (
+	"context"
+	"os"
+
+	"github.com/maatko/secrete/web/template"
+)
+
 func main() {
-	println("Hello, World Bitch!");
+	component := template.Index("Welcome Brother")
+	component.Render(context.Background(), os.Stdout)
 }

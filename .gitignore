@@ -1,3 +1,2 @@
-tmp/
-build/
-.env
+# generated template files
+*_templ.go
