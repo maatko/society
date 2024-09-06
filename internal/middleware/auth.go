@@ -9,7 +9,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		path := request.RequestURI
 
-		if strings.HasPrefix(path, "/login") || strings.HasPrefix(path, "/register") {
+		if strings.HasPrefix(path, "/login") || strings.HasPrefix(path, "/register") || strings.HasPrefix(path, "/static") {
 			next.ServeHTTP(writer, request)
 			return
 		}

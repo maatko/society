@@ -9,6 +9,8 @@ import (
 	"strings"
 
 	"github.com/a-h/templ"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Server struct {
@@ -59,7 +61,7 @@ func Setup(connection string) error {
 func Start(address string, middlewares ...MiddlewareCallback) {
 	// static files
 	fileServer := http.FileServer(http.Dir("./web/static"))
-	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
+	Instance.Router.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
 	// this function applies all the middlewares
 	// that were provided
