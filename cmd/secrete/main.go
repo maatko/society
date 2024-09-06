@@ -19,6 +19,11 @@ func main() {
 	}
 
 	http.HandleFunc("/", BasicHandler)
+
+	// static files
+	fileServer := http.FileServer(http.Dir("./web/static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
+
 	http.ListenAndServe(":8080", nil)
 
 	db.Close()
