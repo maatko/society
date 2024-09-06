@@ -1,22 +1,20 @@
 package template
 
 templ Index() {
-    <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>secrete</title>
-
-            <!-- TailWindCSS -->
-            <link rel="stylesheet" href="/static/css/global.css">
-
-            <!-- HTMX -->
-            <script src="/static/js/htmx/base.js"></script>
-            <script src="/static/js/htmx/ext/ws.js"></script>
-        </head>
-        <body class="w-screen h-screen flex items-center justify-center bg-black text-white font-semibold">
-            <h1 class="text-green-500">Welcome to the underground!</h1>
-        </body>
-    </html>
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>secrete</title>
+			<!-- TailWindCSS -->
+			<link rel="stylesheet" href="/static/css/global.css"/>
+			<!-- HTMX -->
+			<script src="/static/js/htmx/base.js"></script>
+			<script src="/static/js/htmx/ext/ws.js"></script>
+		</head>
+		<body>
+			{ children... }
+		</body>
+	</html>
 }

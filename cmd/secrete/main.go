@@ -6,10 +6,15 @@ import (
 
 	"github.com/maatko/secrete/api"
 	"github.com/maatko/secrete/web/template"
+	"github.com/maatko/secrete/web/template/auth"
 )
 
-func BasicHandler(writer http.ResponseWriter, request *http.Request) {
+func HomeHandler(writer http.ResponseWriter, request *http.Request) {
 	template.Index().Render(request.Context(), writer)
+}
+
+func LoginHandler(writer http.ResponseWriter, request *http.Request) {
+	auth.Login().Render(request.Context(), writer)
 }
 
 func main() {
@@ -18,7 +23,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	http.HandleFunc("/", BasicHandler)
+	http.HandleFunc("/", HomeHandler)
+	http.HandleFunc("/login", LoginHandler)
 
 	// static files
 	fileServer := http.FileServer(http.Dir("./web/static"))
