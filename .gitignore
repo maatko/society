@@ -1,3 +1,6 @@
+# database files
+*.sqlite3
+
 # build directory
 tmp/
 
