@@ -1,2 +1,5 @@
+# build directory
+tmp/
+
 # generated template files
 *_templ.go
