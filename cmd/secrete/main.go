@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/maatko/secrete/api"
+	"github.com/maatko/secrete/internal/middleware"
 	"github.com/maatko/secrete/web/template"
 	"github.com/maatko/secrete/web/template/auth"
 )
@@ -23,14 +24,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	http.HandleFunc("/", HomeHandler)
-	http.HandleFunc("/login", LoginHandler)
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/", HomeHandler)
+	mux.HandleFunc("/login", LoginHandler)
 
 	// static files
 	fileServer := http.FileServer(http.Dir("./web/static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", middleware.LoggingMiddleware(middleware.AuthMiddleware(mux)))
 
 	db.Close()
 }
