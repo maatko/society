@@ -2,7 +2,7 @@ build:
 	@templ generate
 	@go build -o ./tmp/main cmd/secrete/main.go
 
-run: build
+run:
 	./tmp/main
 
 watch:
