@@ -1,14 +1,18 @@
 package server
 
 import (
+	"database/sql"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/a-h/templ"
-	"github.com/maatko/secrete/api"
 )
 
 type Server struct {
-	DataBase *api.DataBase
+	DataBase *sql.DB
 	Router   *http.ServeMux
 }
 
@@ -19,10 +23,30 @@ var (
 )
 
 func Setup(connection string) error {
-	db, err := api.NewDataBase("./api/model/", connection)
+	db, err := sql.Open("sqlite3", connection)
 	if err != nil {
 		return err
 	}
+
+	filepath.Walk("./api/model", func(path string, info os.FileInfo, err error) error {
+		if err != nil || info.IsDir() {
+			return err
+		}
+		if strings.HasSuffix(path, ".sql") {
+			data, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+
+			_, err = db.Exec(string(data))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			log.Print("Model Registered: ", info.Name())
+		}
+		return nil
+	})
 
 	Instance = &Server{
 		DataBase: db,
@@ -61,6 +85,6 @@ func Render(writer http.ResponseWriter, request *http.Request, component templ.C
 	return component.Render(request.Context(), writer)
 }
 
-func DataBase() *api.DataBase {
+func DataBase() *sql.DB {
 	return Instance.DataBase
 }

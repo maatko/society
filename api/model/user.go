@@ -1,15 +1,58 @@
 package model
 
+import "github.com/maatko/secrete/internal/server"
+
 type User struct {
 	ID       int
 	Name     string
 	Password string
 }
 
-func NewUser(id int, name string, password string) *User {
+func NewUser(name string, password string) (*User, error) {
+	_, err := server.DataBase().Exec("INSERT INTO user (name, password) VALUES (?, ?)", name, password)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetUser(name, password)
+}
+
+func GetUser(name string, password string) (*User, error) {
+	row := server.DataBase().QueryRow("SELECT id FROM user WHERE name=? AND password=?", name, password)
+
+	var id int
+	if err := row.Scan(&id); err != nil {
+		return nil, err
+	}
+
 	return &User{
 		ID:       id,
 		Name:     name,
 		Password: password,
+	}, nil
+}
+
+func GetUserByName(name string) (*User, error) {
+	row := server.DataBase().QueryRow("SELECT id, password FROM user WHERE name=?", name)
+
+	var id int
+	var password string
+
+	if err := row.Scan(&id, &password); err != nil {
+		return nil, err
 	}
+
+	return &User{
+		ID:       id,
+		Name:     name,
+		Password: password,
+	}, nil
+}
+
+func (user *User) Delete() error {
+	_, err := server.DataBase().Exec("DELETE FROM user WHERE id=?", user.ID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
