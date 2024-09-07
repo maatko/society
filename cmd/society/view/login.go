@@ -3,8 +3,8 @@ package view
 import (
 	"net/http"
 
-	"github.com/maatko/secrete/internal/server"
-	"github.com/maatko/secrete/web/template/auth"
+	"github.com/maatko/society/internal/server"
+	"github.com/maatko/society/web/template/auth"
 )
 
 func ShowLogin(writer http.ResponseWriter, request *http.Request) {

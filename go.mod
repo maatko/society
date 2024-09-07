@@ -1,4 +1,4 @@
-module github.com/maatko/secrete
+module github.com/maatko/society
 
 go 1.23.0
 

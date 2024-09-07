@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/maatko/secrete/cmd/secrete/view"
-	"github.com/maatko/secrete/internal/middleware"
-	"github.com/maatko/secrete/internal/server"
+	"github.com/maatko/society/cmd/society/view"
+	"github.com/maatko/society/internal/middleware"
+	"github.com/maatko/society/internal/server"
 )
 
 func main() {

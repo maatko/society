@@ -3,8 +3,8 @@ package model
 import (
 	"time"
 
-	"github.com/maatko/secrete/api/model"
-	"github.com/maatko/secrete/internal/server"
+	"github.com/maatko/society/api/model"
+	"github.com/maatko/society/internal/server"
 )
 
 type Session struct {
