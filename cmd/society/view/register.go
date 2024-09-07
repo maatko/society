@@ -30,21 +30,11 @@ func RegisterAccount(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	session, err := model.NewSession(user, 12*time.Hour)
+	err = Login(user, 12*time.Hour, writer)
 	if err != nil {
-		http.Redirect(writer, request, "/register", http.StatusInternalServerError)
+		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
 		return
 	}
-
-	http.SetCookie(writer, &http.Cookie{
-		Name:     "session",
-		Value:    session.UUID.String(),
-		Path:     "/",
-		MaxAge:   0,
-		Secure:   true,
-		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
-	})
 
 	http.Redirect(writer, request, "/", http.StatusTemporaryRedirect)
 }

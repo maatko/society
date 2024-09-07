@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -79,6 +80,21 @@ func Start(address string, middlewares ...MiddlewareCallback) {
 
 func AddRoute(route string, handler func(http.ResponseWriter, *http.Request)) {
 	Instance.Router.HandleFunc(route, handler)
+}
+
+func SetCookie(writer http.ResponseWriter, cookie *http.Cookie) {
+	http.SetCookie(writer, cookie)
+}
+
+func DeleteCookie(writer http.ResponseWriter, name string) {
+	SetCookie(writer, &http.Cookie{
+		Name:    name,
+		Value:   "",
+		Path:    "/",
+		Expires: time.Unix(0, 0),
+
+		HttpOnly: true,
+	})
 }
 
 func DataBase() *sql.DB {

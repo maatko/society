@@ -7,5 +7,5 @@ import (
 )
 
 func ShowHome(writer http.ResponseWriter, request *http.Request) {
-	template.Index().Render(request.Context(), writer)
+	template.Home().Render(request.Context(), writer)
 }

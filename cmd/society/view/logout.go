@@ -2,9 +2,9 @@ package view
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/maatko/society/api/model"
+	"github.com/maatko/society/internal/server"
 )
 
 func LogoutOfAccount(writer http.ResponseWriter, request *http.Request) {
@@ -26,15 +26,6 @@ func LogoutOfAccount(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	// remove the cookie
-	http.SetCookie(writer, &http.Cookie{
-		Name:    "session",
-		Value:   "",
-		Path:    "/",
-		Expires: time.Unix(0, 0),
-
-		HttpOnly: true,
-	})
-
+	server.DeleteCookie(writer, "session")
 	http.Redirect(writer, request, "/", http.StatusTemporaryRedirect)
 }

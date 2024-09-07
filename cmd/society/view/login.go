@@ -5,8 +5,28 @@ import (
 	"time"
 
 	"github.com/maatko/society/api/model"
+	"github.com/maatko/society/internal/server"
 	"github.com/maatko/society/web/template/auth"
 )
+
+func Login(user *model.User, duration time.Duration, writer http.ResponseWriter) error {
+	session, err := model.NewSession(user, 43200*time.Second)
+	if err != nil {
+		return err
+	}
+
+	server.SetCookie(writer, &http.Cookie{
+		Name:     "session",
+		Value:    session.UUID.String(),
+		Path:     "/",
+		MaxAge:   43200,
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	return nil
+}
 
 func LogIntoAccount(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
@@ -24,21 +44,11 @@ func LogIntoAccount(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	session, err := model.NewSession(user, 12*time.Hour)
+	err = Login(user, 12*time.Hour, writer)
 	if err != nil {
-		http.Redirect(writer, request, "/register", http.StatusInternalServerError)
+		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
 		return
 	}
-
-	http.SetCookie(writer, &http.Cookie{
-		Name:     "session",
-		Value:    session.UUID.String(),
-		Path:     "/",
-		MaxAge:   0,
-		Secure:   true,
-		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
-	})
 
 	http.Redirect(writer, request, "/", http.StatusTemporaryRedirect)
 }
