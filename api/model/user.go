@@ -1,6 +1,6 @@
 package model
 
-import "github.com/maatko/secrete/internal/server"
+import "github.com/maatko/society/internal/server"
 
 type User struct {
 	ID       int
@@ -22,6 +22,23 @@ func GetUser(name string, password string) (*User, error) {
 
 	var id int
 	if err := row.Scan(&id); err != nil {
+		return nil, err
+	}
+
+	return &User{
+		ID:       id,
+		Name:     name,
+		Password: password,
+	}, nil
+}
+
+func GetUserByID(id int) (*User, error) {
+	row := server.DataBase().QueryRow("SELECT name, password FROM user WHERE id=?", id)
+
+	var name string
+	var password string
+
+	if err := row.Scan(&name, &password); err != nil {
 		return nil, err
 	}
 

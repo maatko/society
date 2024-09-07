@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/a-h/templ"
-
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -81,10 +79,6 @@ func Start(address string, middlewares ...MiddlewareCallback) {
 
 func AddRoute(route string, handler func(http.ResponseWriter, *http.Request)) {
 	Instance.Router.HandleFunc(route, handler)
-}
-
-func Render(writer http.ResponseWriter, request *http.Request, component templ.Component) error {
-	return component.Render(request.Context(), writer)
 }
 
 func DataBase() *sql.DB {

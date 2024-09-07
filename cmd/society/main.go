@@ -15,8 +15,15 @@ func main() {
 	}
 
 	server.AddRoute("/", view.ShowHome)
-	server.AddRoute("/login", view.ShowLogin)
-	server.AddRoute("/register", view.ShowRegister)
+
+	// authentication routes
+	server.AddRoute("GET  /login", view.ShowLogin)
+	server.AddRoute("POST /login", view.LogIntoAccount)
+
+	server.AddRoute("GET  /register", view.ShowRegister)
+	server.AddRoute("POST /register", view.RegisterAccount)
+
+	server.AddRoute("GET  /logout", view.LogoutOfAccount)
 
 	server.Start(":8080", middleware.LoggingMiddleware, middleware.AuthMiddleware)
 }

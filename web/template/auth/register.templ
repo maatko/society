@@ -2,12 +2,12 @@ package auth
 
 templ Register() {
 	@AuthBase() {
-		<form class="space-y-6" action="#" method="POST">
+		<form class="space-y-6" action="/register" method="POST">
 			<div class="pb-5">
 				<div>
-					<label for="email" class="block text-sm font-medium leading-6 text-white">name</label>
+					<label for="name" class="block text-sm font-medium leading-6 text-white">name</label>
 					<div class="mt-2">
-						<input id="email" name="email" type="email" autocomplete="email" required class="input-primary"/>
+						<input id="text" name="name" type="text" autocomplete="name" required class="input-primary"/>
 					</div>
 				</div>
 				<div class="mt-5">
