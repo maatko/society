@@ -1,7 +1,10 @@
 package template
 
-templ Home() {
+import "github.com/maatko/society/api/model"
+
+templ Home(user *model.User) {
 	@Index() {
+		<p>Welcome { user.Name }!</p>
 		<div class="w-fit p-5">
 			<a href="/logout" class="button-primary">logout</a>
 		</div>

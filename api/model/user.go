@@ -1,6 +1,10 @@
 package model
 
-import "github.com/maatko/society/internal/server"
+import (
+	"net/http"
+
+	"github.com/maatko/society/internal/server"
+)
 
 type User struct {
 	ID       int
@@ -64,6 +68,20 @@ func GetUserByName(name string) (*User, error) {
 		Name:     name,
 		Password: password,
 	}, nil
+}
+
+func GetUserByRequest(request *http.Request) (*User, error) {
+	cookie, err := request.Cookie("session")
+	if err != nil {
+		return nil, err
+	}
+
+	session, err := GetSessionByCookie(cookie)
+	if err != nil {
+		return nil, err
+	}
+
+	return session.User, nil
 }
 
 func (user *User) Delete() error {

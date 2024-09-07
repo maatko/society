@@ -2,13 +2,13 @@ package view
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/maatko/society/api/model"
+	authentication "github.com/maatko/society/internal/auth"
 	"github.com/maatko/society/web/template/auth"
 )
 
-func RegisterAccount(writer http.ResponseWriter, request *http.Request) {
+func POST_Register(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
 	if err != nil {
 		http.Redirect(writer, request, "/register", http.StatusBadRequest)
@@ -30,7 +30,7 @@ func RegisterAccount(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	err = Login(user, 12*time.Hour, writer)
+	err = authentication.Login(writer, user, 43200)
 	if err != nil {
 		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
 		return
@@ -39,6 +39,6 @@ func RegisterAccount(writer http.ResponseWriter, request *http.Request) {
 	http.Redirect(writer, request, "/", http.StatusTemporaryRedirect)
 }
 
-func ShowRegister(writer http.ResponseWriter, request *http.Request) {
+func GET_Register(writer http.ResponseWriter, request *http.Request) {
 	auth.Register().Render(request.Context(), writer)
 }

@@ -14,16 +14,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	server.AddRoute("/", view.ShowHome)
+	server.AddRoute("/", view.GET_Home)
 
 	// authentication routes
-	server.AddRoute("GET  /login", view.ShowLogin)
-	server.AddRoute("POST /login", view.LogIntoAccount)
+	server.AddRoute("GET  /login", view.GET_Login)
+	server.AddRoute("POST /login", view.POST_Login)
 
-	server.AddRoute("GET  /register", view.ShowRegister)
-	server.AddRoute("POST /register", view.RegisterAccount)
+	server.AddRoute("GET  /register", view.GET_Register)
+	server.AddRoute("POST /register", view.POST_Register)
 
-	server.AddRoute("GET  /logout", view.LogoutOfAccount)
+	server.AddRoute("GET  /logout", view.GET_Logout)
 
 	server.Start(":8080", middleware.LoggingMiddleware, middleware.AuthMiddleware)
 }
