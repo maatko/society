@@ -1,7 +1,6 @@
 package view
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/maatko/society/api/model"
@@ -21,15 +20,13 @@ func POST_Login(writer http.ResponseWriter, request *http.Request) {
 
 	user, err := model.GetUser(name, password)
 	if err != nil {
-		log.Println(err)
-		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
+		auth.Login("invalid credentials").Render(request.Context(), writer)
 		return
 	}
 
 	err = authentication.Login(writer, user, 43200)
 	if err != nil {
-		log.Println(err)
-		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
+		auth.Login("failed to authenticate").Render(request.Context(), writer)
 		return
 	}
 
@@ -37,5 +34,5 @@ func POST_Login(writer http.ResponseWriter, request *http.Request) {
 }
 
 func GET_Login(writer http.ResponseWriter, request *http.Request) {
-	auth.Login().Render(request.Context(), writer)
+	auth.Login("").Render(request.Context(), writer)
 }

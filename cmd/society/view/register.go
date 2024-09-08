@@ -1,7 +1,6 @@
 package view
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/maatko/society/api/model"
@@ -21,22 +20,19 @@ func POST_Register(writer http.ResponseWriter, request *http.Request) {
 
 	_, err = model.GetUserByName(name)
 	if err == nil {
-		log.Println(err)
-		http.Redirect(writer, request, "/register", http.StatusTemporaryRedirect)
+		auth.Register("user already exists!").Render(request.Context(), writer)
 		return
 	}
 
 	user, err := model.NewUser(name, password)
 	if err != nil {
-		log.Println(err)
-		http.Redirect(writer, request, "/register", http.StatusInternalServerError)
+		auth.Register("internal server error!").Render(request.Context(), writer)
 		return
 	}
 
 	err = authentication.Login(writer, user, 43200)
 	if err != nil {
-		log.Println(err)
-		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
+		auth.Register("failed to authenticate").Render(request.Context(), writer)
 		return
 	}
 
@@ -44,5 +40,5 @@ func POST_Register(writer http.ResponseWriter, request *http.Request) {
 }
 
 func GET_Register(writer http.ResponseWriter, request *http.Request) {
-	auth.Register().Render(request.Context(), writer)
+	auth.Register("").Render(request.Context(), writer)
 }

@@ -2,13 +2,18 @@ package auth
 
 import "github.com/maatko/society/web/template"
 
-templ AuthBase() {
+templ AuthBase(message string) {
 	@template.Index() {
 		<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
 			<div class="sm:mx-auto sm:w-full sm:max-w-sm">
 				<h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">society</h2>
 			</div>
 			<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+				if len(message) > 0 {
+					<div class="p-3 mb-5 rounded-md font-semibold bg-zinc-900/40 text-red-600 text-center">
+						<small>{ message }</small>
+					</div>
+				}
 				{ children... }
 			</div>
 		</div>
