@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/maatko/society/internal/server"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -13,7 +14,12 @@ type User struct {
 }
 
 func NewUser(name string, password string) (*User, error) {
-	_, err := server.DataBase().Exec("INSERT INTO user (name, password) VALUES (?, ?)", name, password)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = server.DataBase().Exec("INSERT INTO user (name, password) VALUES (?, ?)", name, passwordHash)
 	if err != nil {
 		return nil, err
 	}
@@ -22,10 +28,26 @@ func NewUser(name string, password string) (*User, error) {
 }
 
 func GetUser(name string, password string) (*User, error) {
-	row := server.DataBase().QueryRow("SELECT id FROM user WHERE name=? AND password=?", name, password)
+	user, err := GetUserByName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func GetUserByName(name string) (*User, error) {
+	row := server.DataBase().QueryRow("SELECT id, password FROM user WHERE name=?", name)
 
 	var id int
-	if err := row.Scan(&id); err != nil {
+	var password string
+
+	if err := row.Scan(&id, &password); err != nil {
 		return nil, err
 	}
 
@@ -43,23 +65,6 @@ func GetUserByID(id int) (*User, error) {
 	var password string
 
 	if err := row.Scan(&name, &password); err != nil {
-		return nil, err
-	}
-
-	return &User{
-		ID:       id,
-		Name:     name,
-		Password: password,
-	}, nil
-}
-
-func GetUserByName(name string) (*User, error) {
-	row := server.DataBase().QueryRow("SELECT id, password FROM user WHERE name=?", name)
-
-	var id int
-	var password string
-
-	if err := row.Scan(&id, &password); err != nil {
 		return nil, err
 	}
 

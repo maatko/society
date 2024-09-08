@@ -2,8 +2,8 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-  bin = "./tmp/main"
-  cmd = "make build"
+  bin = "./tmp/society"
+  cmd = "templ generate && go build -tags dev -o ./tmp/society ./cmd/society/main.go"
 
   delay = 10
   exclude_dir = ["assets", "tmp", "vendor"]

@@ -1,6 +1,7 @@
 package view
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/maatko/society/api/model"
@@ -20,18 +21,21 @@ func POST_Register(writer http.ResponseWriter, request *http.Request) {
 
 	_, err = model.GetUserByName(name)
 	if err == nil {
+		log.Println(err)
 		http.Redirect(writer, request, "/register", http.StatusTemporaryRedirect)
 		return
 	}
 
 	user, err := model.NewUser(name, password)
 	if err != nil {
+		log.Println(err)
 		http.Redirect(writer, request, "/register", http.StatusInternalServerError)
 		return
 	}
 
 	err = authentication.Login(writer, user, 43200)
 	if err != nil {
+		log.Println(err)
 		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
 		return
 	}
