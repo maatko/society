@@ -12,7 +12,7 @@ import (
 func POST_Register(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
 	if err != nil {
-		auth.Register("internal server error").Render(request.Context(), writer)
+		auth.Register("internal server error", "").Render(request.Context(), writer)
 		return
 	}
 
@@ -22,25 +22,25 @@ func POST_Register(writer http.ResponseWriter, request *http.Request) {
 
 	invite, err := model.GetInviteByCode(code)
 	if err != nil {
-		auth.Register("invalid invite code!").Render(request.Context(), writer)
+		auth.Register("invalid invite code!", "").Render(request.Context(), writer)
 		return
 	}
 
 	if invite.UsedBy != nil {
-		auth.Register("invite code already in use!").Render(request.Context(), writer)
+		auth.Register("invite code already in use!", "").Render(request.Context(), writer)
 		return
 	}
 
 	_, err = model.GetUserByName(name)
 	if err == nil {
 		log.Print(err)
-		auth.Register("user already exists!").Render(request.Context(), writer)
+		auth.Register("user already exists!", "").Render(request.Context(), writer)
 		return
 	}
 
 	user, err := model.NewUser(name, password)
 	if err != nil {
-		auth.Register("internal server error!").Render(request.Context(), writer)
+		auth.Register("internal server error!", "").Render(request.Context(), writer)
 		return
 	}
 
@@ -48,13 +48,13 @@ func POST_Register(writer http.ResponseWriter, request *http.Request) {
 	err = invite.Update()
 	if err != nil {
 		user.Delete()
-		auth.Register("internal server error!").Render(request.Context(), writer)
+		auth.Register("internal server error!", "").Render(request.Context(), writer)
 		return
 	}
 
 	err = authentication.Login(writer, user)
 	if err != nil {
-		auth.Register("failed to authenticate").Render(request.Context(), writer)
+		auth.Register("failed to authenticate", "").Render(request.Context(), writer)
 		return
 	}
 
@@ -62,5 +62,6 @@ func POST_Register(writer http.ResponseWriter, request *http.Request) {
 }
 
 func GET_Register(writer http.ResponseWriter, request *http.Request) {
-	auth.Register("").Render(request.Context(), writer)
+	values := request.URL.Query()
+	auth.Register("", values.Get("code")).Render(request.Context(), writer)
 }

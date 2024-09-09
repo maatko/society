@@ -1,6 +1,6 @@
 package auth
 
-templ Register(message string) {
+templ Register(message string, inviteCode string) {
 	@AuthBase(message) {
 		<form class="space-y-6" action="/register" method="POST">
 			<div class="pb-5">
@@ -19,7 +19,7 @@ templ Register(message string) {
 				<div class="mt-5">
 					<label for="code" class="block text-sm font-medium leading-6 text-white">invite code</label>
 					<div class="mt-2">
-						<input id="code" name="code" type="text" autocomplete="current-password" required class="input-primary"/>
+						<input id="code" name="code" type="text" autocomplete="current-password" required class="input-primary" value={ inviteCode }/>
 					</div>
 					<small class="font-semibold text-zinc-600">you can only make an account if you were directly invited by someone in the society</small>
 				</div>
