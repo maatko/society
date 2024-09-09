@@ -54,14 +54,14 @@ func Setup(connection string) error {
 		Router:   http.NewServeMux(),
 	}
 
-	return nil
-}
-
-func Start(address string, middlewares ...MiddlewareCallback) {
 	// static files
 	fileServer := http.FileServer(http.Dir("./web/static"))
 	Instance.Router.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
+	return nil
+}
+
+func Start(address string, middlewares ...MiddlewareCallback) {
 	// this function applies all the middlewares
 	// that were provided
 	apply := func(handler http.Handler, middlewares ...MiddlewareCallback) http.Handler {

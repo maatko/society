@@ -11,7 +11,7 @@ import (
 func POST_Login(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
 	if err != nil {
-		http.Redirect(writer, request, "/register", http.StatusBadRequest)
+		auth.Login("internal server error").Render(request.Context(), writer)
 		return
 	}
 
@@ -24,7 +24,7 @@ func POST_Login(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	err = authentication.Login(writer, user, 43200)
+	err = authentication.Login(writer, user)
 	if err != nil {
 		auth.Login("failed to authenticate").Render(request.Context(), writer)
 		return

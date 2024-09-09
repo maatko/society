@@ -1,7 +1,9 @@
 package model
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/maatko/society/internal/server"
 	"golang.org/x/crypto/bcrypt"
@@ -84,6 +86,11 @@ func GetUserByRequest(request *http.Request) (*User, error) {
 	session, err := GetSessionByCookie(cookie)
 	if err != nil {
 		return nil, err
+	}
+
+	if session.ExpiresAt.Before(time.Now()) {
+		session.Delete()
+		return nil, fmt.Errorf("session expired")
 	}
 
 	return session.User, nil

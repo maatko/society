@@ -1,6 +1,7 @@
 package view
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/maatko/society/api/model"
@@ -8,9 +9,11 @@ import (
 )
 
 func GET_Home(writer http.ResponseWriter, request *http.Request) {
+	log.Println("Hello world!")
+
 	user, err := model.GetUserByRequest(request)
 	if err != nil {
-		http.Redirect(writer, request, "/", http.StatusInternalServerError)
+		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
 		return
 	}
 

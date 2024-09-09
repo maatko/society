@@ -17,7 +17,6 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			}
 
 			http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
-			next.ServeHTTP(writer, request)
 			return
 		}
 

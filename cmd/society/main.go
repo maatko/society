@@ -14,8 +14,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	server.AddRoute("/", view.GET_Home)
-
 	// authentication routes
 	server.AddRoute("GET  /login", view.GET_Login)
 	server.AddRoute("POST /login", view.POST_Login)
@@ -24,6 +22,8 @@ func main() {
 	server.AddRoute("POST /register", view.POST_Register)
 
 	server.AddRoute("GET  /logout", view.GET_Logout)
+
+	server.AddRoute("/", view.GET_Home)
 
 	server.Start(":8080", middleware.LoggingMiddleware, middleware.AuthMiddleware)
 }

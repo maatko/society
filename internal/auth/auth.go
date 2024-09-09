@@ -8,13 +8,16 @@ import (
 	"github.com/maatko/society/internal/server"
 )
 
+// 43200
+
 const (
 	SESSION_COOKIE      = "session"
 	SESSION_COOKIE_PATH = "/"
+	SESSION_DURATION    = 43200
 )
 
-func Login(writer http.ResponseWriter, user *model.User, duration time.Duration) error {
-	session, err := model.NewSession(user, duration*time.Second)
+func Login(writer http.ResponseWriter, user *model.User) error {
+	session, err := model.NewSession(user, SESSION_DURATION*time.Second)
 	if err != nil {
 		return err
 	}
@@ -23,7 +26,7 @@ func Login(writer http.ResponseWriter, user *model.User, duration time.Duration)
 		Name:     SESSION_COOKIE,
 		Value:    session.UUID.String(),
 		Path:     SESSION_COOKIE_PATH,
-		MaxAge:   int(duration),
+		MaxAge:   int(SESSION_DURATION),
 		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,

@@ -1,6 +1,7 @@
 package view
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/maatko/society/api/model"
@@ -11,15 +12,28 @@ import (
 func POST_Register(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
 	if err != nil {
-		http.Redirect(writer, request, "/register", http.StatusBadRequest)
+		auth.Register("internal server error").Render(request.Context(), writer)
 		return
 	}
 
 	name := request.FormValue("name")
 	password := request.FormValue("password")
+	code := request.FormValue("code")
+
+	invite, err := model.GetInviteByCode(code)
+	if err != nil {
+		auth.Register("invalid invite code!").Render(request.Context(), writer)
+		return
+	}
+
+	if invite.UsedBy != nil {
+		auth.Register("invite code already in use!").Render(request.Context(), writer)
+		return
+	}
 
 	_, err = model.GetUserByName(name)
 	if err == nil {
+		log.Print(err)
 		auth.Register("user already exists!").Render(request.Context(), writer)
 		return
 	}
@@ -30,7 +44,15 @@ func POST_Register(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	err = authentication.Login(writer, user, 43200)
+	invite.UsedBy = user
+	err = invite.Update()
+	if err != nil {
+		user.Delete()
+		auth.Register("internal server error!").Render(request.Context(), writer)
+		return
+	}
+
+	err = authentication.Login(writer, user)
 	if err != nil {
 		auth.Register("failed to authenticate").Render(request.Context(), writer)
 		return
