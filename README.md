@@ -1,4 +1,4 @@
-# secrete
+# society
 underground social media platform
 
 ## templ
