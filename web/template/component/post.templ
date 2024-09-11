@@ -1,0 +1,42 @@
+package component
+
+import (
+	"github.com/maatko/society/api/model"
+	"strings"
+)
+
+templ Post(user *model.User) {
+	<div class="max-w-2xl divide-y divide-zinc-800 overflow-hidden rounded-lg bg-zinc-900 shadow">
+		<div class="px-4 py-5 sm:px-6">
+			<a href={ templ.SafeURL("/" + user.Name) }>
+				<span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
+					<span class="font-medium leading-none text-white">{ strings.ToUpper(user.Name[:2]) }</span>
+				</span>
+				<strong class="ml-2">{ user.Name }</strong>
+			</a>
+		</div>
+		<div class="px-4 py-4">
+			<img src="https://papers.co/wallpaper/papers.co-ml14-sunset-lake-night-dark-nature-35-3840x2160-4k-wallpaper.jpg" alt="image"/>
+			<div class="mt-3">
+				<button type="button" class="relative flex-shrink-0 rounded-full bg-zinc-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+					<span class="absolute -inset-1.5"></span>
+					<span class="sr-only">like post</span>
+					<svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"></path>
+					</svg>
+				</button>
+				<button type="button" class="relative flex-shrink-0 rounded-full bg-zinc-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+					<span class="absolute -inset-1.5"></span>
+					<span class="sr-only">comment post</span>
+					<svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" viewBox="0 0 32 32">
+						<path d="M 16 3 C 12.210938 3 8.765625 4.113281 6.21875 5.976563 C 3.667969 7.835938 2 10.507813 2 13.5 C 2 17.128906 4.472656 20.199219 8 22.050781 L 8 29 L 14.746094 23.9375 C 15.15625 23.96875 15.570313 24 16 24 C 19.789063 24 23.234375 22.886719 25.78125 21.027344 C 28.332031 19.164063 30 16.492188 30 13.5 C 30 10.507813 28.332031 7.835938 25.78125 5.976563 C 23.234375 4.113281 19.789063 3 16 3 Z M 16 5 C 19.390625 5 22.445313 6.015625 24.601563 7.589844 C 26.757813 9.164063 28 11.246094 28 13.5 C 28 15.753906 26.757813 17.835938 24.601563 19.410156 C 22.445313 20.984375 19.390625 22 16 22 C 15.507813 22 15.015625 21.972656 14.523438 21.925781 L 14.140625 21.894531 L 10 25 L 10 20.859375 L 9.421875 20.59375 C 6.070313 19.019531 4 16.386719 4 13.5 C 4 11.246094 5.242188 9.164063 7.398438 7.589844 C 9.554688 6.015625 12.609375 5 16 5 Z"></path>
+					</svg>
+				</button>
+			</div>
+		</div>
+		<div class="px-4 py-4 sm:px-6">
+			<strong>272 Likes</strong>
+			<p class="text-sm mt-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam numquam officia ab illum, debitis consequuntur recusandae neque. Ipsum atque voluptate similique eius fugiat aperiam dignissimos ad perferendis. Ad, iure nemo?</p>
+		</div>
+	</div>
+}
