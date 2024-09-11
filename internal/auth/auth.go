@@ -27,7 +27,7 @@ func Login(writer http.ResponseWriter, user *model.User) error {
 		Value:    session.UUID.String(),
 		Path:     SESSION_COOKIE_PATH,
 		MaxAge:   int(SESSION_DURATION),
-		Secure:   true,
+		Secure:   false,
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
 	})
