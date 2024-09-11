@@ -58,6 +58,10 @@ func Setup(connection string) error {
 	fileServer := http.FileServer(http.Dir("./web/static"))
 	Instance.Router.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
+	// storage files (aka uploaded files)
+	storageServer := http.FileServer(http.Dir("./web/storage"))
+	Instance.Router.Handle("/storage/", http.StripPrefix("/storage/", storageServer))
+
 	return nil
 }
 

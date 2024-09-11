@@ -5,13 +5,19 @@ import (
 	"github.com/maatko/society/web/template/component"
 )
 
-templ Home(user *model.User) {
+templ Home(user *model.User, posts []*model.Post) {
 	@Index() {
 		<div class="flex flex-col min-h-screen">
 			@component.Navigation(user)
 			<div class="flex flex-col flex-grow w-full lg:w-2/3 items-center mx-auto bg-zinc-900/40">
 				<div class="flex flex-col gap-y-5 m-5">
-					@component.Post(user)
+					if len(posts) > 0 {
+						for _, post := range posts {
+							@component.Post(post)
+						}
+					} else {
+						<h2>not posts, <a href="/post" class="text-indigo-500 underline">be the first one to post!</a></h2>
+					}
 				</div>
 			</div>
 		</div>

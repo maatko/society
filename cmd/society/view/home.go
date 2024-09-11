@@ -1,6 +1,7 @@
 package view
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/maatko/society/api/model"
@@ -19,5 +20,11 @@ func GET_Home(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	template.Home(user).Render(request.Context(), writer)
+	posts, err := model.GetAllPosts()
+	if err != nil {
+		log.Println(err)
+		posts = []*model.Post{}
+	}
+
+	template.Home(user, posts).Render(request.Context(), writer)
 }
