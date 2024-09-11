@@ -61,7 +61,7 @@ func Setup(connection string) error {
 	return nil
 }
 
-func Start(address string, middlewares ...MiddlewareCallback) {
+func Start(address string, middlewares ...MiddlewareCallback) error {
 	// this function applies all the middlewares
 	// that were provided
 	apply := func(handler http.Handler, middlewares ...MiddlewareCallback) http.Handler {
@@ -71,11 +71,24 @@ func Start(address string, middlewares ...MiddlewareCallback) {
 		return handler
 	}
 
-	http.ListenAndServe(address, apply(Instance.Router, middlewares...))
+	args := strings.Split(address, ":")
+
+	if len(args) == 1 || len(args[0]) == 0 {
+		log.Printf("Server started at http://localhost%s\n", address)
+	} else {
+		log.Printf("Server started at http://%s\n", address)
+	}
+
+	err := http.ListenAndServe(address, apply(Instance.Router, middlewares...))
+	if err != nil {
+		return err
+	}
 
 	// make sure to close the database
 	// once the server has stopped
 	Instance.DataBase.Close()
+
+	return nil
 }
 
 func AddRoute(route string, handler func(http.ResponseWriter, *http.Request)) {

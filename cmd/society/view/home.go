@@ -1,7 +1,6 @@
 package view
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/maatko/society/api/model"
@@ -9,7 +8,10 @@ import (
 )
 
 func GET_Home(writer http.ResponseWriter, request *http.Request) {
-	log.Println("Hello world!")
+	if request.URL.Path != "/" {
+		template.NotFound().Render(request.Context(), writer)
+		return
+	}
 
 	user, err := model.GetUserByRequest(request)
 	if err != nil {
