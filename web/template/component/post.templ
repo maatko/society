@@ -37,7 +37,7 @@ templ Post(post *model.Post) {
 		<div class="px-4 py-4 sm:px-6">
 			<strong>272 Likes</strong>
 			<p class="text-sm py-5">{ post.About }</p>
-			<p class="text-sm text-zinc-500">{ post.CreatedAt.Format("Mon, 02 Jan 2006") }</p>
+			<p class="text-sm text-zinc-500">{ post.CreatedAt.Format("Mon, 02 Jan 2006 @ 15:04:05") }</p>
 		</div>
 	</div>
 }

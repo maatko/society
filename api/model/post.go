@@ -58,7 +58,7 @@ func GetPostByUUID(uuid uuid.UUID) (*Post, error) {
 func GetAllPosts() ([]*Post, error) {
 	posts := []*Post{}
 
-	rows, err := server.DataBase().Query("SELECT * FROM post")
+	rows, err := server.DataBase().Query("SELECT * FROM post ORDER BY created_at DESC")
 	if err != nil {
 		return nil, err
 	}
