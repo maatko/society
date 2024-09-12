@@ -52,6 +52,10 @@ func POST_Register(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	for i := 0; i < model.INVITE_CODE_START; i++ {
+		model.NewInvite(user)
+	}
+
 	err = authentication.Login(writer, user)
 	if err != nil {
 		auth.Register("failed to authenticate", "").Render(request.Context(), writer)

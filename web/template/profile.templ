@@ -43,7 +43,11 @@ templ Profile(user *model.User, profileUser *model.User, posts []*model.Post) {
 								@component.Post(user, post)
 							}
 						} else {
-							<h2>not posts, <a href="/post" class="text-indigo-500 underline">create your first post!</a></h2>
+							if user.ID == profileUser.ID {
+								<h2>not posts, <a href="/post" class="text-indigo-500 underline">create your first post!</a></h2>
+							} else {
+								<h2>Oops, looks like { profileUser.Name } does not have any posts!</h2>
+							}
 						}
 					</div>
 				</div>

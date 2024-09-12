@@ -1,7 +1,9 @@
 package model
 
 import (
+	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -143,6 +145,44 @@ func (user *User) GetPosts() ([]*Post, error) {
 	}
 
 	return posts, nil
+}
+
+func (user *User) GetMyInvites() []*Invite {
+	invites := []*Invite{}
+
+	rows, err := server.DataBase().Query("SELECT id, code, used_by FROM invite WHERE created_by=?", user.ID)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		invite := &Invite{
+			CreatedBy: user,
+		}
+
+		var usedBy sql.NullInt64
+		if err := rows.Scan(&invite.ID, &invite.Code, &usedBy); err != nil {
+			log.Println(err)
+			return nil
+		}
+
+		var usedUser *User = nil
+		if usedBy.Valid {
+			usedUser, err = GetUserByID(int(usedBy.Int64))
+			if err != nil {
+				log.Println(err)
+				return nil
+			}
+		}
+
+		invite.UsedBy = usedUser
+		invites = append(invites, invite)
+	}
+
+	log.Println(invites)
+	return invites
 }
 
 func (user *User) Delete() error {
