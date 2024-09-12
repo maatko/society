@@ -11,7 +11,7 @@ templ Post(user *model.User, post *model.Post) {
 		<input type="hidden" name="id" value={ fmt.Sprintf("%d", post.ID) }/>
 		<div class="max-w-2xl divide-y divide-zinc-800 overflow-hidden rounded-lg bg-zinc-900 shadow">
 			<div class="w-full grid grid-cols-4 items-center px-4 py-5 sm:px-6">
-				<div class="w-fit">
+				<div class="col-span-2">
 					<a href={ templ.SafeURL("/" + post.User.Name) }>
 						<span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
 							<span class="font-medium leading-none text-white">{ strings.ToUpper(post.User.Name[:2]) }</span>
@@ -19,7 +19,7 @@ templ Post(user *model.User, post *model.Post) {
 						<strong class="ml-2">{ post.User.Name }</strong>
 					</a>
 				</div>
-				<div class="flex items-center justify-end col-span-3">
+				<div class="flex items-center justify-end col-span-2">
 					if user.ID == post.User.ID {
 						<button hx-delete="/post" hx-target={ templ.EscapeString("#post-" + fmt.Sprintf("%d", post.ID)) } type="button" class="relative flex-shrink-0 rounded-full bg-zinc-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
 							<span class="absolute -inset-1.5"></span>

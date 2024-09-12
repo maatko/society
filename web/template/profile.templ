@@ -27,11 +27,11 @@ templ Profile(user *model.User, profileUser *model.User, posts []*model.Post) {
 									<small class="font-light">posts</small>
 								</div>
 								<div class="flex flex-col items-center">
-									<strong>367</strong>
+									<strong>{ fmt.Sprintf("%d", profileUser.GetTotalComments()) }</strong>
 									<small class="font-light">comments</small>
 								</div>
 								<div class="flex flex-col items-center">
-									<strong>367</strong>
+									<strong>{ fmt.Sprintf("%d", profileUser.GetTotalLikes()) }</strong>
 									<small class="font-light">likes</small>
 								</div>
 							</div>

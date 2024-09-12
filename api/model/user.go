@@ -185,6 +185,34 @@ func (user *User) GetMyInvites() []*Invite {
 	return invites
 }
 
+func (user *User) GetTotalComments() int {
+	posts, err := user.GetPosts()
+	if err != nil {
+		return 0
+	}
+
+	var count int = 0
+	for _, post := range posts {
+		count += len(post.GetComments())
+	}
+
+	return count
+}
+
+func (user *User) GetTotalLikes() int {
+	posts, err := user.GetPosts()
+	if err != nil {
+		return 0
+	}
+
+	var count int = 0
+	for _, post := range posts {
+		count += len(post.GetLikes())
+	}
+
+	return count
+}
+
 func (user *User) Delete() error {
 	_, err := server.DataBase().Exec("DELETE FROM user WHERE id=?", user.ID)
 	if err != nil {
