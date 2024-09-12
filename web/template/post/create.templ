@@ -1,12 +1,13 @@
-package template
+package post
 
 import (
 	"github.com/maatko/society/api/model"
+	"github.com/maatko/society/web/template"
 	"github.com/maatko/society/web/template/component"
 )
 
-templ Post(user *model.User, message string) {
-	@Index() {
+templ CreatePost(user *model.User, message string) {
+	@template.Index() {
 		<div class="flex flex-col">
 			@component.Navigation(user)
 			if len(message) > 0 {

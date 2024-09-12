@@ -4,11 +4,13 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
+	"github.com/google/uuid"
 	"github.com/maatko/society/api/model"
 	"github.com/maatko/society/internal/server"
-	"github.com/maatko/society/web/template"
 	"github.com/maatko/society/web/template/component"
+	"github.com/maatko/society/web/template/post"
 )
 
 func GET_CreatePost(writer http.ResponseWriter, request *http.Request) {
@@ -18,7 +20,25 @@ func GET_CreatePost(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	template.Post(user, "").Render(request.Context(), writer)
+	id := strings.TrimSuffix(request.URL.Path[6:], "/")
+	if len(id) > 0 {
+		uuid, err := uuid.Parse(id)
+		if err != nil {
+			http.Redirect(writer, request, "/post", http.StatusTemporaryRedirect)
+			return
+		}
+
+		userPost, err := model.GetPostByUUID(uuid)
+		if err != nil {
+			http.Redirect(writer, request, "/post", http.StatusTemporaryRedirect)
+			return
+		}
+
+		post.ViewPost(user, userPost).Render(request.Context(), writer)
+		return
+	}
+
+	post.CreatePost(user, "").Render(request.Context(), writer)
 }
 
 func POST_CreatePost(writer http.ResponseWriter, request *http.Request) {
@@ -30,20 +50,20 @@ func POST_CreatePost(writer http.ResponseWriter, request *http.Request) {
 
 	err = request.ParseMultipartForm(server.UPLOAD_LIMIT)
 	if err != nil {
-		template.Post(user, "invalid form data").Render(request.Context(), writer)
+		post.CreatePost(user, "invalid form data").Render(request.Context(), writer)
 		return
 	}
 
 	imageID, imagePath, err := server.UploadImage(request, "image")
 	if err != nil {
-		template.Post(user, "failed to upload image").Render(request.Context(), writer)
+		post.CreatePost(user, "failed to upload image").Render(request.Context(), writer)
 		return
 	}
 
 	_, err = model.NewPost(user, imageID, imagePath, request.FormValue("about"))
 	if err != nil {
 		log.Println(err)
-		template.Post(user, "failed to create post in database").Render(request.Context(), writer)
+		post.CreatePost(user, "failed to create post in database").Render(request.Context(), writer)
 		return
 	}
 
