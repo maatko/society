@@ -29,5 +29,5 @@ func main() {
 	// home page
 	server.AddRoute("/", view.GET_Home)
 
-	server.Start(":8080", middleware.LoggingMiddleware, middleware.AuthMiddleware)
+	server.Start("192.168.1.9:8080", middleware.LoggingMiddleware, middleware.AuthMiddleware)
 }
