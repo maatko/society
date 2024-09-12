@@ -53,33 +53,57 @@ func POST_CreatePost(writer http.ResponseWriter, request *http.Request) {
 func POST_LikePost(writer http.ResponseWriter, request *http.Request) {
 	user, err := model.GetUserByRequest(request)
 	if err != nil {
+		return
+	}
+
+	err = request.ParseForm()
+	if err != nil {
+		return
+	}
+
+	id, err := strconv.Atoi(request.FormValue("id"))
+	if err != nil {
+		return
+	}
+
+	post, err := model.GetPostByID(id)
+	if err != nil {
+		return
+	}
+
+	err = post.Like(user)
+	if err != nil {
+		return
+	}
+
+	component.Post(user, post).Render(request.Context(), writer)
+}
+
+func DELETE_Post(writer http.ResponseWriter, request *http.Request) {
+	user, err := model.GetUserByRequest(request)
+	if err != nil {
 		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
 		return
 	}
 
 	err = request.ParseForm()
 	if err != nil {
-		template.Post(user, "invalid form data").Render(request.Context(), writer)
 		return
 	}
 
 	id, err := strconv.Atoi(request.FormValue("id"))
 	if err != nil {
-		template.Post(user, "invalid form data").Render(request.Context(), writer)
 		return
 	}
 
 	post, err := model.GetPostByID(id)
 	if err != nil {
-		template.Post(user, "invalid form data").Render(request.Context(), writer)
 		return
 	}
 
-	err = post.Like(user)
-	if err != nil {
-		template.Post(user, "invalid form data").Render(request.Context(), writer)
+	if user.ID != post.User.ID {
 		return
 	}
 
-	component.Post(user, post).Render(request.Context(), writer)
+	post.Delete()
 }

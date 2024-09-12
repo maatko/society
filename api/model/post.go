@@ -143,6 +143,14 @@ func SearchPosts(query string) []*Post {
 	return posts
 }
 
+func (post *Post) Delete() error {
+	_, err := server.DataBase().Exec("DELETE FROM post WHERE id=?", post.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (post *Post) Like(user *User) error {
 	var err error
 	if post.IsLikedBy(user) {

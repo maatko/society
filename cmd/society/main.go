@@ -25,6 +25,7 @@ func main() {
 	server.AddRoute("GET /post", view.GET_CreatePost)
 	server.AddRoute("POST /post", view.POST_CreatePost)
 	server.AddRoute("POST /like", view.POST_LikePost)
+	server.AddRoute("DELETE /post", view.DELETE_Post)
 
 	// serach
 	server.AddRoute("GET /search", view.GET_Search)
