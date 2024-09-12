@@ -131,18 +131,15 @@ func DELETE_Post(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	err = request.ParseForm()
+	id, err := strconv.Atoi(request.URL.Query().Get("id"))
 	if err != nil {
-		return
-	}
-
-	id, err := strconv.Atoi(request.FormValue("id"))
-	if err != nil {
+		log.Println("id conv")
 		return
 	}
 
 	post, err := model.GetPostByID(id)
 	if err != nil {
+		log.Println("get post")
 		return
 	}
 
@@ -150,5 +147,8 @@ func DELETE_Post(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	post.Delete()
+	err = post.Delete()
+	if err != nil {
+		log.Println(err)
+	}
 }
