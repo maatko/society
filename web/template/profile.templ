@@ -40,7 +40,7 @@ templ Profile(user *model.User, profileUser *model.User, posts []*model.Post) {
 					<div class="w-full p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
 						if len(posts) > 0 {
 							for _, post := range posts {
-								@component.Post(post)
+								@component.Post(user, post)
 							}
 						} else {
 							<h2>not posts, <a href="/post" class="text-indigo-500 underline">create your first post!</a></h2>

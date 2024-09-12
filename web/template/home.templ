@@ -13,7 +13,7 @@ templ Home(user *model.User, posts []*model.Post) {
 				<div class="flex flex-col gap-y-5 m-5">
 					if len(posts) > 0 {
 						for _, post := range posts {
-							@component.Post(post)
+							@component.Post(user, post)
 						}
 					} else {
 						<h2>not posts, <a href="/post" class="text-indigo-500 underline">be the first one to post!</a></h2>

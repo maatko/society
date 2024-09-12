@@ -3,10 +3,12 @@ package view
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/maatko/society/api/model"
 	"github.com/maatko/society/internal/server"
 	"github.com/maatko/society/web/template"
+	"github.com/maatko/society/web/template/component"
 )
 
 func GET_CreatePost(writer http.ResponseWriter, request *http.Request) {
@@ -46,4 +48,38 @@ func POST_CreatePost(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	http.Redirect(writer, request, "/", http.StatusTemporaryRedirect)
+}
+
+func POST_LikePost(writer http.ResponseWriter, request *http.Request) {
+	user, err := model.GetUserByRequest(request)
+	if err != nil {
+		http.Redirect(writer, request, "/login", http.StatusTemporaryRedirect)
+		return
+	}
+
+	err = request.ParseForm()
+	if err != nil {
+		template.Post(user, "invalid form data").Render(request.Context(), writer)
+		return
+	}
+
+	id, err := strconv.Atoi(request.FormValue("id"))
+	if err != nil {
+		template.Post(user, "invalid form data").Render(request.Context(), writer)
+		return
+	}
+
+	post, err := model.GetPostByID(id)
+	if err != nil {
+		template.Post(user, "invalid form data").Render(request.Context(), writer)
+		return
+	}
+
+	err = post.Like(user)
+	if err != nil {
+		template.Post(user, "invalid form data").Render(request.Context(), writer)
+		return
+	}
+
+	component.Post(user, post).Render(request.Context(), writer)
 }

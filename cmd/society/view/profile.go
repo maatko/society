@@ -21,7 +21,7 @@ func ShowProfile(writer http.ResponseWriter, request *http.Request) bool {
 		return false
 	}
 
-	posts, err := model.GetPostsByUser(profileUser)
+	posts, err := profileUser.GetPosts()
 	if err != nil {
 		return false
 	}

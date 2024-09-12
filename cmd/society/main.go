@@ -24,6 +24,7 @@ func main() {
 	// post management routes
 	server.AddRoute("GET /post", view.GET_CreatePost)
 	server.AddRoute("POST /post", view.POST_CreatePost)
+	server.AddRoute("POST /like", view.POST_LikePost)
 
 	// home page
 	server.AddRoute("/", view.GET_Home)

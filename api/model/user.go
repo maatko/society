@@ -96,6 +96,35 @@ func GetUserByRequest(request *http.Request) (*User, error) {
 	return session.User, nil
 }
 
+func (user *User) GetPosts() ([]*Post, error) {
+	posts := []*Post{}
+
+	rows, err := server.DataBase().Query("SELECT * FROM post WHERE user=? ORDER BY created_at DESC", user.ID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		post := &Post{}
+
+		var userID int
+		if err := rows.Scan(&post.ID, &userID, &post.UUID, &post.Cover, &post.About, &post.CreatedAt, &post.UpdatedAt); err != nil {
+			return nil, err
+		}
+
+		user, err := GetUserByID(userID)
+		if err != nil {
+			return nil, err
+		}
+
+		post.User = user
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}
+
 func (user *User) Delete() error {
 	_, err := server.DataBase().Exec("DELETE FROM user WHERE id=?", user.ID)
 	if err != nil {
