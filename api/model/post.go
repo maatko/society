@@ -151,6 +151,41 @@ func (post *Post) Delete() error {
 	return nil
 }
 
+func (post *Post) Comment(user *User, text string) (*Comment, error) {
+	return NewComment(user, post, text)
+}
+
+func (post *Post) GetComments() []*Comment {
+	posts := []*Comment{}
+
+	rows, err := server.DataBase().Query("SELECT id, user, text, created_at FROM comment WHERE post=? ORDER BY created_at DESC", post.ID)
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		comment := &Comment{
+			Post: post,
+		}
+
+		var userID int
+		if err := rows.Scan(&comment.ID, &userID, &comment.Text, &comment.CreatedAt); err != nil {
+			return nil
+		}
+
+		user, err := GetUserByID(userID)
+		if err != nil {
+			return nil
+		}
+
+		comment.User = user
+		posts = append(posts, comment)
+	}
+
+	return posts
+}
+
 func (post *Post) Like(user *User) error {
 	var err error
 	if post.IsLikedBy(user) {

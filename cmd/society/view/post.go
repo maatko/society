@@ -70,6 +70,31 @@ func POST_CreatePost(writer http.ResponseWriter, request *http.Request) {
 	http.Redirect(writer, request, "/", http.StatusTemporaryRedirect)
 }
 
+func POST_CommentPost(writer http.ResponseWriter, request *http.Request) {
+	user, err := model.GetUserByRequest(request)
+	if err != nil {
+		return
+	}
+
+	err = request.ParseForm()
+	if err != nil {
+		return
+	}
+
+	id, err := strconv.Atoi(request.FormValue("id"))
+	if err != nil {
+		return
+	}
+
+	post, err := model.GetPostByID(id)
+	if err != nil {
+		return
+	}
+
+	post.Comment(user, request.FormValue("comment"))
+	component.Comments(post.GetComments()).Render(request.Context(), writer)
+}
+
 func POST_LikePost(writer http.ResponseWriter, request *http.Request) {
 	user, err := model.GetUserByRequest(request)
 	if err != nil {

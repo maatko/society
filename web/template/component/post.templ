@@ -32,7 +32,7 @@ templ Post(user *model.User, post *model.Post) {
 				</div>
 			</div>
 			<div class="px-4 py-4">
-				<a href={ templ.SafeURL("/post/" + post.UUID.String()) }>
+				<a href={ templ.SafeURL(post.Cover) }>
 					<img src={ post.Cover } alt="image" class="w-full h-96 object-cover"/>
 				</a>
 				<div class="flex gap-x-2 mt-3">
