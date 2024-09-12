@@ -13,7 +13,7 @@ templ Post(user *model.User, post *model.Post) {
 			<div class="px-4 py-5 sm:px-6">
 				<a href={ templ.SafeURL("/" + post.User.Name) }>
 					<span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
-						<span class="font-medium leading-none text-white">{ strings.ToUpper(user.Name[:2]) }</span>
+						<span class="font-medium leading-none text-white">{ strings.ToUpper(post.User.Name[:2]) }</span>
 					</span>
 					<strong class="ml-2">{ post.User.Name }</strong>
 				</a>

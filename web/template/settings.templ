@@ -1,0 +1,17 @@
+package template
+
+import (
+	"github.com/maatko/society/api/model"
+	"github.com/maatko/society/web/template/component"
+)
+
+templ Settings(user *model.User) {
+	@Index() {
+		<div class="flex flex-col min-h-screen">
+			@component.Navigation(user)
+			<div class="flex flex-col flex-grow w-full lg:w-2/3 items-center mx-auto bg-zinc-900/40">
+				<h1>Settings</h1>
+			</div>
+		</div>
+	}
+}

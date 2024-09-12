@@ -29,6 +29,9 @@ func main() {
 	// serach
 	server.AddRoute("GET /search", view.GET_Search)
 
+	// settings
+	server.AddRoute("GET /settings", view.GET_Settings)
+
 	// home page
 	server.AddRoute("/", view.GET_Home)
 
