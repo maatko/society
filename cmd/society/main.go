@@ -26,6 +26,9 @@ func main() {
 	server.AddRoute("POST /post", view.POST_CreatePost)
 	server.AddRoute("POST /like", view.POST_LikePost)
 
+	// serach
+	server.AddRoute("GET /search", view.GET_Search)
+
 	// home page
 	server.AddRoute("/", view.GET_Home)
 

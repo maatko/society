@@ -96,6 +96,26 @@ func GetUserByRequest(request *http.Request) (*User, error) {
 	return session.User, nil
 }
 
+func SearchUsers(query string) []*User {
+	posts := []*User{}
+
+	rows, err := server.DataBase().Query("SELECT * FROM user WHERE name LIKE '%" + query + "%'")
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		user := &User{}
+		if err := rows.Scan(&user.ID, &user.Name, &user.Password); err != nil {
+			return nil
+		}
+		posts = append(posts, user)
+	}
+
+	return posts
+}
+
 func (user *User) GetPosts() ([]*Post, error) {
 	posts := []*Post{}
 

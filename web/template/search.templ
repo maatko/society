@@ -1,0 +1,96 @@
+package template
+
+import (
+	"fmt"
+	"github.com/maatko/society/api/model"
+	"github.com/maatko/society/web/template/component"
+	"strings"
+)
+
+templ Search(user *model.User, users []*model.User, posts []*model.Post) {
+	@Index() {
+		<div class="flex flex-col min-h-screen">
+			@component.Navigation(user)
+			<div class="flex flex-col flex-grow w-full lg:w-2/3 items-center mx-auto bg-zinc-900/40">
+				<div x-data="{ activeTab: 'users' }" class="w-full">
+					<div class="block">
+						<div class="border-b border-zinc-800">
+							<nav class="flex justify-center -mb-px space-x-8" aria-label="Tabs">
+								<a
+									href="#"
+									@click.prevent="activeTab = 'users'"
+									:class="{'border border-indigo-500 bg-indigo-800': activeTab === 'users', 'border-none': activeTab !== 'users'}"
+									class="flex whitespace-nowrap px-5 py-4 text-sm font-medium rounded-md"
+								>
+									users
+									<span class="ml-3 rounded-full bg-zinc-800 px-2.5 py-0.5 text-xs font-medium text-zinc-200 md:inline-block">
+										{ fmt.Sprintf("%d", len(users)) }
+									</span>
+								</a>
+								<a
+									href="#"
+									@click.prevent="activeTab = 'posts'"
+									:class="{'border border-indigo-500 bg-indigo-800': activeTab === 'posts', 'border-none': activeTab !== 'posts'}"
+									class="flex whitespace-nowrap px-5 py-4 text-sm font-medium rounded-md"
+								>
+									posts
+									<span class="ml-3 rounded-full bg-zinc-800 px-2.5 py-0.5 text-xs font-medium text-zinc-200 md:inline-block">
+										{ fmt.Sprintf("%d", len(posts)) }
+									</span>
+								</a>
+							</nav>
+						</div>
+					</div>
+					<div x-show="activeTab === 'users'" class="w-full flex flex-col gap-y-3 p-4">
+						if len(users) > 0 {
+							for index, result := range users {
+								if index % 2 == 0 {
+									<a href={ templ.SafeURL("/" + result.Name) }>
+										<div class="flex flex-row divide-x rounded-lg shadow cursor-pointer py-5 divide-zinc-700 bg-zinc-950 hover:bg-zinc-900">
+											<div class="flex items-center justify-center px-10">
+												<span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
+													<span class="font-medium leading-none text-white">{ strings.ToUpper(user.Name[:2]) }</span>
+												</span>
+											</div>
+											<div class="flex flex-col px-10">
+												<strong>{ result.Name }</strong>
+												<small>{ templ.EscapeString("@" + result.Name) }</small>
+											</div>
+										</div>
+									</a>
+								} else {
+									<a href={ templ.SafeURL("/" + result.Name) }>
+										<div class="flex flex-row divide-x rounded-lg shadow cursor-pointer py-5 divide-zinc-700 bg-zinc-950/30 hover:bg-zinc-900">
+											<div class="flex items-center justify-center px-10">
+												<span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
+													<span class="font-medium leading-none text-white">{ strings.ToUpper(user.Name[:2]) }</span>
+												</span>
+											</div>
+											<div class="flex flex-col px-10">
+												<strong>{ result.Name }</strong>
+												<small>{ templ.EscapeString("@" + result.Name) }</small>
+											</div>
+										</div>
+									</a>
+								}
+							}
+						} else {
+							<h1>no users found</h1>
+						}
+					</div>
+					<div x-show="activeTab === 'posts'" class="p-4">
+						<div class="w-full p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+							if len(posts) > 0 {
+								for _, result := range posts {
+									@component.Post(user, result)
+								}
+							} else {
+								<h1>no posts found</h1>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}

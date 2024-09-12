@@ -114,6 +114,35 @@ func GetAllPosts() ([]*Post, error) {
 	return posts, nil
 }
 
+func SearchPosts(query string) []*Post {
+	posts := []*Post{}
+
+	rows, err := server.DataBase().Query("SELECT * FROM post WHERE about LIKE '%" + query + "%'")
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		post := &Post{}
+
+		var userID int
+		if err := rows.Scan(&post.ID, &userID, &post.UUID, &post.Cover, &post.About, &post.CreatedAt, &post.UpdatedAt); err != nil {
+			return nil
+		}
+
+		user, err := GetUserByID(userID)
+		if err != nil {
+			return nil
+		}
+
+		post.User = user
+		posts = append(posts, post)
+	}
+
+	return posts
+}
+
 func (post *Post) Like(user *User) error {
 	var err error
 	if post.IsLikedBy(user) {
