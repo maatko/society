@@ -10,7 +10,9 @@ import (
 
 func GET_Home(writer http.ResponseWriter, request *http.Request) {
 	if request.URL.Path != "/" {
-		template.NotFound().Render(request.Context(), writer)
+		if !ShowProfile(writer, request) {
+			template.NotFound().Render(request.Context(), writer)
+		}
 		return
 	}
 

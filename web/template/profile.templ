@@ -1,0 +1,53 @@
+package template
+
+import (
+	"fmt"
+	"github.com/maatko/society/api/model"
+	"github.com/maatko/society/web/template/component"
+	"strings"
+)
+
+templ Profile(user *model.User, profileUser *model.User, posts []*model.Post) {
+	@Index() {
+		<div class="flex flex-col min-h-screen">
+			@component.Navigation(user)
+			<div class="relative flex-grow w-full lg:w-2/3 items-center mx-auto bg-zinc-900/40">
+				<div class="relative block w-full min-h-72 bg-zinc-900"></div>
+				<div class="flex flex-col gap-y-14">
+					<div class="relative w-full flex flex-row items-center gap-x-10 pl-5">
+						<div class="absolute w-fit -inset-y-5">
+							<span class="inline-flex h-32 w-32 text-5xl items-center justify-center rounded-full bg-zinc-800">
+								<span class="font-medium leading-none text-white">{ strings.ToUpper(user.Name[:2]) }</span>
+							</span>
+						</div>
+						<div class="flex w-full flex-col gap-y-20">
+							<div class="relative inset-x-40 mt-8 w-fit flex flex-row gap-x-10">
+								<div class="flex flex-col items-center">
+									<strong>{ fmt.Sprintf("%d",len(posts)) }</strong>
+									<small class="font-light">posts</small>
+								</div>
+								<div class="flex flex-col items-center">
+									<strong>367</strong>
+									<small class="font-light">comments</small>
+								</div>
+								<div class="flex flex-col items-center">
+									<strong>367</strong>
+									<small class="font-light">likes</small>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="w-full p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+						if len(posts) > 0 {
+							for _, post := range posts {
+								@component.Post(post)
+							}
+						} else {
+							<h2>not posts, <a href="/post" class="text-indigo-500 underline">be the first one to post!</a></h2>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}

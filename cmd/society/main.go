@@ -25,6 +25,7 @@ func main() {
 	server.AddRoute("GET /post", view.GET_CreatePost)
 	server.AddRoute("POST /post", view.POST_CreatePost)
 
+	// home page
 	server.AddRoute("/", view.GET_Home)
 
 	server.Start(":8080", middleware.LoggingMiddleware, middleware.AuthMiddleware)
