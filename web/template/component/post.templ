@@ -7,7 +7,8 @@ import (
 )
 
 templ Post(user *model.User, post *model.Post) {
-	<div id={ templ.EscapeString("post-" + fmt.Sprintf("%d", post.ID)) }>
+	<form id={ templ.EscapeString("post-" + fmt.Sprintf("%d", post.ID)) }>
+		<input type="hidden" name="id" value={ fmt.Sprintf("%d", post.ID) }/>
 		<div class="max-w-2xl divide-y divide-zinc-800 overflow-hidden rounded-lg bg-zinc-900 shadow">
 			<div class="w-full grid grid-cols-4 items-center px-4 py-5 sm:px-6">
 				<div class="col-span-2">
@@ -63,5 +64,5 @@ templ Post(user *model.User, post *model.Post) {
 				<p class="text-sm text-zinc-500">{ post.CreatedAt.Format("Mon, 02 Jan 2006 @ 15:04:05") }</p>
 			</div>
 		</div>
-	</div>
+	</form>
 }
