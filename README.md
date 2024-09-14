@@ -1,6 +1,10 @@
 # society
 underground social media platform
 
+### disclaimer
+this was made whilst attending [FERIT](https://www.ferit.unios.hr/) and it is not
+ment to be used in production!
+
 ## templ
 for templating this project uses the [templ](https://templ.guide/) library.
 It needs to be installed as a go module using go install.
